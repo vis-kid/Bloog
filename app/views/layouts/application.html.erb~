@@ -8,7 +8,7 @@
 </head>
 <body>
 
-  <h2 class="notice"><%= flash[:notice] %></h2>
+  <h2class="notice"><%= flash[:notice] %></h2>
 
 <div class="sidebar two columns">
   <nav>

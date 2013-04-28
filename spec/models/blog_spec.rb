@@ -36,7 +36,7 @@ describe Blog do
 
   describe '#add_entry' do
     it 'adds the entry to the blog' do
-      entry = Object.new
+      entry = stub!
       @it.add_entry(entry)
       @it.entries.must_include(entry)
     end
@@ -67,6 +67,38 @@ describe Blog do
       it 'is the current time' do
         @it.pubdate.must_equal(@now)
       end
+    end
+  end
+
+  describe '#entries' do
+    
+    def stub_entry_with_date(date)
+      OpenStruct.new(pubdate: DateTime.parse(date))
+    end
+
+    it 'is sorted in reverse-chronological order' do
+      oldest = stub_entry_with_date("2011-09-09")
+      middle= stub_entry_with_date("2012-09-09")
+      newest = stub_entry_with_date("2013-09-09")
+      
+      @it.add_entry(oldest)
+      @it.add_entry(middle)
+      @it.add_entry(newest)
+
+      @it.entries.must_equal([newest, middle, oldest])
+    end
+
+    it 'is limited to 10 itmes' do
+
+      10.times do |i|
+        @it.add_entry(stub_entry_with_date("2011-09-#{i+1}"))
+      end
+
+      oldest = stub_entry_with_date("2010-09-09")
+      @it.add_entry(oldest)
+
+      @it.entries.size.must_equal(10)
+      @it.entries.wont_include(oldest)
     end
   end
 end

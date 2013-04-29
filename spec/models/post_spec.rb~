@@ -1,4 +1,8 @@
 require 'minitest/autorun'
+module ActiveModel
+  module Naming; end
+  module Conversion; end
+end
 require_relative '../spec_helper_lite'
 stub_module 'ActiveModel::Conversion'
 stub_module 'ActiveModel::Naming'
@@ -50,6 +54,26 @@ describe Post do
     it 'adds the post to the blog' do
       @blog.expect :add_entry, nil, [@it]
       @it.publish
+    end
+
+    describe 'given an invalid post' do
+      before do @it.title = nil end
+
+      it 'wont add the post to the blog' do
+        dont_allow(@blog).add_entry
+        @it.publish
+      end
+
+      it 'returns false' do
+        refute(@it.publish)
+      end
+    end
+  end
+
+  describe '#picture?' do
+    it 'is true when the post has a picture URL' do
+      @it.image_url = 'http://example.org/foo.png'
+      assert(@it.picutre?)
     end
   end
 end

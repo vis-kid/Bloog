@@ -1,3 +1,4 @@
+<% entry = exhibit(entry, self) %>
 <article>
   <header>
     <p><time pupdate="pubdate"><%= entry.pubdate %></time></p>
